@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "22761064795",
+    "project_id": "hiredupnew",
+    "storage_bucket": "hiredupnew.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22761064795:android:3e57b59e4115d91ea7727e",
+        "android_client_info": {
+          "package_name": "com.flutterflow.hireups"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKhi7eNaKu2529VM4IfNKJfbIfUsjf2lA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
