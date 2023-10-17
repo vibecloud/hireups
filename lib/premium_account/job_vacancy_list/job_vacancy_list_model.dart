@@ -1,18 +1,20 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/pages/login/login_widget.dart';
-import 'view_my_profile_widget.dart' show ViewMyProfileWidget;
+import '/main.dart';
+import 'job_vacancy_list_widget.dart' show JobVacancyListWidget;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class ViewMyProfileModel extends FlutterFlowModel<ViewMyProfileWidget> {
+class JobVacancyListModel extends FlutterFlowModel<JobVacancyListWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  // State field(s) for TextField widget.
+  TextEditingController? textController;
+  String? Function(BuildContext, String?)? textControllerValidator;
 
   /// Initialization and disposal methods.
 
@@ -20,6 +22,7 @@ class ViewMyProfileModel extends FlutterFlowModel<ViewMyProfileWidget> {
 
   void dispose() {
     unfocusNode.dispose();
+    textController?.dispose();
   }
 
   /// Action blocks are added here.

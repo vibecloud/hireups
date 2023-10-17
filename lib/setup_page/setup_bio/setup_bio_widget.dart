@@ -101,347 +101,377 @@ class _SetupBioWidgetState extends State<SetupBioWidget>
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
-        body: SafeArea(
-          top: true,
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      FlutterFlowTheme.of(context).primary,
-                      FlutterFlowTheme.of(context).secondary
-                    ],
-                    stops: [0.0, 1.0],
-                    begin: AlignmentDirectional(0.0, -1.0),
-                    end: AlignmentDirectional(0, 1.0),
+        body: Stack(
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        FlutterFlowTheme.of(context).primary,
+                        FlutterFlowTheme.of(context).secondary
+                      ],
+                      stops: [0.0, 1.0],
+                      begin: AlignmentDirectional(0.0, -1.0),
+                      end: AlignmentDirectional(0, 1.0),
+                    ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0.00, 0.00),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: AlignmentDirectional(0.00, -1.00),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 0.0, 0.0, 50.0),
+                Align(
+                  alignment: AlignmentDirectional(0.00, 0.00),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(0.00, -1.00),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 0.0, 0.0, 50.0),
+                          child: Text(
+                            'Tell us about yourself!',
+                            textAlign: TextAlign.center,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Urbanist',
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBtnText,
+                                  fontSize: 27.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 7.0),
                         child: Text(
-                          'Tell us about yourself!',
-                          textAlign: TextAlign.center,
+                          'Whats your location?',
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
                                 fontFamily: 'Urbanist',
                                 color:
                                     FlutterFlowTheme.of(context).primaryBtnText,
-                                fontSize: 27.0,
-                                fontWeight: FontWeight.w600,
                               ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 7.0),
-                      child: Text(
-                        'Whats your location?',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Urbanist',
-                              color:
-                                  FlutterFlowTheme.of(context).primaryBtnText,
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 50.0),
+                        child: AuthUserStreamWidget(
+                          builder: (context) =>
+                              StreamBuilder<List<UsersRecord>>(
+                            stream: queryUsersRecord(
+                              queryBuilder: (usersRecord) => usersRecord.where(
+                                'Location',
+                                isEqualTo: valueOrDefault(
+                                    currentUserDocument?.location, ''),
+                              ),
+                              singleRecord: true,
                             ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 50.0),
-                      child: AuthUserStreamWidget(
-                        builder: (context) => StreamBuilder<List<UsersRecord>>(
-                          stream: queryUsersRecord(
-                            queryBuilder: (usersRecord) => usersRecord.where(
-                              'Location',
-                              isEqualTo: valueOrDefault(
-                                  currentUserDocument?.location, ''),
-                            ),
-                            singleRecord: true,
-                          ),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        FlutterFlowTheme.of(context).primary,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }
-                            List<UsersRecord> textFieldUsersRecordList =
-                                snapshot.data!;
-                            final textFieldUsersRecord =
-                                textFieldUsersRecordList.isNotEmpty
-                                    ? textFieldUsersRecordList.first
-                                    : null;
-                            return TextFormField(
-                              controller: _model.textController1,
-                              autofocus: true,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                labelStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
+                                );
+                              }
+                              List<UsersRecord> textFieldUsersRecordList =
+                                  snapshot.data!;
+                              final textFieldUsersRecord =
+                                  textFieldUsersRecordList.isNotEmpty
+                                      ? textFieldUsersRecordList.first
+                                      : null;
+                              return TextFormField(
+                                controller: _model.textController1,
+                                autofocus: true,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  labelStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBtnText,
+                                      ),
+                                  hintText: 'Brighton, West Sussex',
+                                  hintStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF070707),
+                                      ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryBtnText,
+                                      width: 3.0,
                                     ),
-                                hintText: 'Brighton, West Sussex',
-                                hintStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                      width: 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: FlutterFlowTheme.of(context).error,
+                                      width: 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: FlutterFlowTheme.of(context).error,
+                                      width: 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
                                     .override(
-                                      fontFamily: 'Poppins',
+                                      fontFamily: 'Urbanist',
                                       color: Color(0xFF070707),
                                     ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                    width: 3.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                    width: 3.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).error,
-                                    width: 3.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).error,
-                                    width: 3.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Urbanist',
-                                    color: Color(0xFF070707),
-                                  ),
-                              validator: _model.textController1Validator
-                                  .asValidator(context),
-                            ).animateOnPageLoad(animationsMap[
-                                'textFieldOnPageLoadAnimation1']!);
-                          },
+                                validator: _model.textController1Validator
+                                    .asValidator(context),
+                              ).animateOnPageLoad(animationsMap[
+                                  'textFieldOnPageLoadAnimation1']!);
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional(0.00, 0.00),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 0.0, 0.0, 10.0),
-                        child: Text(
-                          'Write a short bio about who you are:',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'Urbanist',
-                                color:
-                                    FlutterFlowTheme.of(context).primaryBtnText,
-                              ),
+                      Align(
+                        alignment: AlignmentDirectional(0.00, 0.00),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 0.0, 0.0, 10.0),
+                          child: Text(
+                            'Write a short bio about who you are:',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Urbanist',
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBtnText,
+                                ),
+                          ),
                         ),
                       ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: AlignmentDirectional(0.00, 0.00),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  8.0, 0.0, 8.0, 0.0),
-                              child: AuthUserStreamWidget(
-                                builder: (context) =>
-                                    StreamBuilder<List<UsersRecord>>(
-                                  stream: queryUsersRecord(
-                                    queryBuilder: (usersRecord) =>
-                                        usersRecord.where(
-                                      'bio',
-                                      isEqualTo: valueOrDefault(
-                                          currentUserDocument?.bio, ''),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Align(
+                              alignment: AlignmentDirectional(0.00, 0.00),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 0.0, 8.0, 0.0),
+                                child: AuthUserStreamWidget(
+                                  builder: (context) =>
+                                      StreamBuilder<List<UsersRecord>>(
+                                    stream: queryUsersRecord(
+                                      queryBuilder: (usersRecord) =>
+                                          usersRecord.where(
+                                        'bio',
+                                        isEqualTo: valueOrDefault(
+                                            currentUserDocument?.bio, ''),
+                                      ),
+                                      singleRecord: true,
                                     ),
-                                    singleRecord: true,
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    }
-                                    List<UsersRecord> textFieldUsersRecordList =
-                                        snapshot.data!;
-                                    // Return an empty Container when the item does not exist.
-                                    if (snapshot.data!.isEmpty) {
-                                      return Container();
-                                    }
-                                    final textFieldUsersRecord =
-                                        textFieldUsersRecordList.isNotEmpty
-                                            ? textFieldUsersRecordList.first
-                                            : null;
-                                    return TextFormField(
-                                      controller: _model.textController2,
-                                      autofocus: true,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: '250 character limit',
-                                        labelStyle: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .override(
-                                              fontFamily: 'Poppins',
+                                        );
+                                      }
+                                      List<UsersRecord>
+                                          textFieldUsersRecordList =
+                                          snapshot.data!;
+                                      // Return an empty Container when the item does not exist.
+                                      if (snapshot.data!.isEmpty) {
+                                        return Container();
+                                      }
+                                      final textFieldUsersRecord =
+                                          textFieldUsersRecordList.isNotEmpty
+                                              ? textFieldUsersRecordList.first
+                                              : null;
+                                      return TextFormField(
+                                        controller: _model.textController2,
+                                        autofocus: true,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: '250 character limit',
+                                          labelStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .labelMedium
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryBtnText,
+                                              ),
+                                          hintText: '250 Character Limit',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Poppins',
+                                                    color: Color(0xFF070707),
+                                                  ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryBtnText,
+                                              width: 3.0,
                                             ),
-                                        hintText: '250 Character Limit',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .labelMedium
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              width: 3.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 3.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 3.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
                                             .override(
-                                              fontFamily: 'Poppins',
+                                              fontFamily: 'Urbanist',
                                               color: Color(0xFF070707),
                                             ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBtnText,
-                                            width: 3.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            width: 3.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .error,
-                                            width: 3.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .error,
-                                            width: 3.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Urbanist',
-                                            color: Color(0xFF070707),
-                                          ),
-                                      maxLength: 250,
-                                      maxLengthEnforcement:
-                                          MaxLengthEnforcement.enforced,
-                                      validator: _model.textController2Validator
-                                          .asValidator(context),
-                                    ).animateOnPageLoad(animationsMap[
-                                        'textFieldOnPageLoadAnimation2']!);
-                                  },
+                                        maxLength: 250,
+                                        maxLengthEnforcement:
+                                            MaxLengthEnforcement.enforced,
+                                        validator: _model
+                                            .textController2Validator
+                                            .asValidator(context),
+                                      ).animateOnPageLoad(animationsMap[
+                                          'textFieldOnPageLoadAnimation2']!);
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        await currentUserReference!
-                            .update(createUsersRecordData(
-                          bio: _model.textController2.text,
-                          location: _model.textController1.text,
-                        ));
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SetupProfilepicWidget(),
-                          ),
-                        );
-                      },
-                      child: Icon(
-                        Icons.arrow_right_alt,
-                        color: Color(0xFF070707),
-                        size: 80.0,
+                        ],
                       ),
-                    ).animateOnActionTrigger(
-                      animationsMap['iconOnActionTriggerAnimation']!,
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional(0.00, 0.00),
-                      child: Text(
-                        'Continue...',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Urbanist',
-                              color: Color(0xFF070707),
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          await currentUserReference!
+                              .update(createUsersRecordData(
+                            bio: _model.textController2.text,
+                            location: _model.textController1.text,
+                          ));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SetupProfilepicWidget(),
                             ),
+                          );
+                        },
+                        child: Icon(
+                          Icons.arrow_right_alt,
+                          color: Color(0xFF070707),
+                          size: 80.0,
+                        ),
+                      ).animateOnActionTrigger(
+                        animationsMap['iconOnActionTriggerAnimation']!,
                       ),
-                    ),
-                  ],
+                      Align(
+                        alignment: AlignmentDirectional(0.00, 0.00),
+                        child: Text(
+                          'Continue...',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Urbanist',
+                                    color: Color(0xFF070707),
+                                  ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+              child: Container(
+                width: double.infinity,
+                height: 191.0,
+                decoration: BoxDecoration(
+                  color: Color(0x004B39EF),
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: Image.asset(
+                      'assets/images/hireuplogodraft-removebg-preview.png',
+                    ).image,
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

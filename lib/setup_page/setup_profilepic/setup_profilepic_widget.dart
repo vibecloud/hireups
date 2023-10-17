@@ -90,184 +90,232 @@ class _SetupProfilepicWidgetState extends State<SetupProfilepicWidget>
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Color(0xFF070707),
-        body: SafeArea(
-          top: true,
-          child: Stack(
-            children: [
-              Stack(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              FlutterFlowTheme.of(context).primary,
-                              FlutterFlowTheme.of(context).secondary
-                            ],
-                            stops: [0.0, 1.0],
-                            begin: AlignmentDirectional(0.0, -1.0),
-                            end: AlignmentDirectional(0, 1.0),
-                          ),
+        body: Stack(
+          children: [
+            Stack(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            FlutterFlowTheme.of(context).primary,
+                            FlutterFlowTheme.of(context).secondary
+                          ],
+                          stops: [0.0, 1.0],
+                          begin: AlignmentDirectional(0.0, -1.0),
+                          end: AlignmentDirectional(0, 1.0),
                         ),
                       ),
-                      Align(
-                        alignment: AlignmentDirectional(0.00, 0.00),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional(0.00, 0.00),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 0.0, 10.0),
-                                child: Text(
-                                  'Lets upload a photo',
-                                  textAlign: TextAlign.center,
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Urbanist',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBtnText,
-                                        fontSize: 27.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                              ),
-                            ),
-                            InkWell(
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional(0.00, 0.00),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          AuthUserStreamWidget(
+                            builder: (context) => InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                final selectedMedia =
-                                    await selectMediaWithSourceBottomSheet(
-                                  context: context,
-                                  allowPhoto: true,
-                                  backgroundColor: Color(0xFF070707),
-                                  textColor: FlutterFlowTheme.of(context)
-                                      .primaryBtnText,
-                                  pickerFontFamily: 'Roboto',
-                                );
-                                if (selectedMedia != null &&
-                                    selectedMedia.every((m) =>
-                                        validateFileFormat(
-                                            m.storagePath, context))) {
-                                  setState(() => _model.isDataUploading = true);
-                                  var selectedUploadedFiles =
-                                      <FFUploadedFile>[];
-
-                                  var downloadUrls = <String>[];
-                                  try {
-                                    selectedUploadedFiles = selectedMedia
-                                        .map((m) => FFUploadedFile(
-                                              name:
-                                                  m.storagePath.split('/').last,
-                                              bytes: m.bytes,
-                                              height: m.dimensions?.height,
-                                              width: m.dimensions?.width,
-                                              blurHash: m.blurHash,
-                                            ))
-                                        .toList();
-
-                                    downloadUrls = (await Future.wait(
-                                      selectedMedia.map(
-                                        (m) async => await uploadData(
-                                            m.storagePath, m.bytes),
-                                      ),
-                                    ))
-                                        .where((u) => u != null)
-                                        .map((u) => u!)
-                                        .toList();
-                                  } finally {
-                                    _model.isDataUploading = false;
-                                  }
-                                  if (selectedUploadedFiles.length ==
-                                          selectedMedia.length &&
-                                      downloadUrls.length ==
-                                          selectedMedia.length) {
-                                    setState(() {
-                                      _model.uploadedLocalFile =
-                                          selectedUploadedFiles.first;
-                                      _model.uploadedFileUrl =
-                                          downloadUrls.first;
-                                    });
-                                  } else {
-                                    setState(() {});
-                                    return;
-                                  }
-                                }
-
                                 await currentUserReference!
                                     .update(createUsersRecordData(
                                   photoUrl: _model.uploadedFileUrl,
                                 ));
-                                if (valueOrDefault(
-                                        currentUserDocument?.hireOrWork, '') ==
-                                    valueOrDefault(
-                                        currentUserDocument?.desiredGender,
-                                        '')) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SetupJobReqWidget(),
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SetupCVWidget(),
-                                    ),
-                                  );
-                                }
                               },
-                              child: Icon(
-                                Icons.file_upload_outlined,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryBtnText,
-                                size: 150.0,
-                              ),
-                            )
-                                .animateOnPageLoad(
-                                    animationsMap['iconOnPageLoadAnimation']!)
-                                .animateOnActionTrigger(
-                                  animationsMap[
-                                      'iconOnActionTriggerAnimation']!,
+                              child: Container(
+                                width: 120.0,
+                                height: 120.0,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
                                 ),
-                            Text(
-                              'Upload Profile Photo',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Urbanist',
-                                    color: Colors.black,
-                                  ),
+                                child: Image.network(
+                                  currentUserPhoto,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Align(
+                            alignment: AlignmentDirectional(0.00, 0.00),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  10.0, 0.0, 0.0, 10.0),
+                              child: Text(
+                                'Lets upload a photo',
+                                textAlign: TextAlign.center,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                      fontSize: 27.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              final selectedMedia =
+                                  await selectMediaWithSourceBottomSheet(
+                                context: context,
+                                allowPhoto: true,
+                                backgroundColor: Color(0xFF070707),
+                                textColor:
+                                    FlutterFlowTheme.of(context).primaryBtnText,
+                                pickerFontFamily: 'Roboto',
+                              );
+                              if (selectedMedia != null &&
+                                  selectedMedia.every((m) => validateFileFormat(
+                                      m.storagePath, context))) {
+                                setState(() => _model.isDataUploading = true);
+                                var selectedUploadedFiles = <FFUploadedFile>[];
+
+                                var downloadUrls = <String>[];
+                                try {
+                                  selectedUploadedFiles = selectedMedia
+                                      .map((m) => FFUploadedFile(
+                                            name: m.storagePath.split('/').last,
+                                            bytes: m.bytes,
+                                            height: m.dimensions?.height,
+                                            width: m.dimensions?.width,
+                                            blurHash: m.blurHash,
+                                          ))
+                                      .toList();
+
+                                  downloadUrls = (await Future.wait(
+                                    selectedMedia.map(
+                                      (m) async => await uploadData(
+                                          m.storagePath, m.bytes),
+                                    ),
+                                  ))
+                                      .where((u) => u != null)
+                                      .map((u) => u!)
+                                      .toList();
+                                } finally {
+                                  _model.isDataUploading = false;
+                                }
+                                if (selectedUploadedFiles.length ==
+                                        selectedMedia.length &&
+                                    downloadUrls.length ==
+                                        selectedMedia.length) {
+                                  setState(() {
+                                    _model.uploadedLocalFile =
+                                        selectedUploadedFiles.first;
+                                    _model.uploadedFileUrl = downloadUrls.first;
+                                  });
+                                } else {
+                                  setState(() {});
+                                  return;
+                                }
+                              }
+
+                              await currentUserReference!
+                                  .update(createUsersRecordData(
+                                photoUrl: _model.uploadedFileUrl,
+                              ));
+                              if (valueOrDefault(
+                                      currentUserDocument?.hireOrWork, '') ==
+                                  valueOrDefault(
+                                      currentUserDocument?.desiredGender, '')) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SetupJobReqWidget(),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SetupCVWidget(),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Icon(
+                              Icons.file_upload_outlined,
+                              color:
+                                  FlutterFlowTheme.of(context).primaryBtnText,
+                              size: 150.0,
+                            ),
+                          )
+                              .animateOnPageLoad(
+                                  animationsMap['iconOnPageLoadAnimation']!)
+                              .animateOnActionTrigger(
+                                animationsMap['iconOnActionTriggerAnimation']!,
+                              ),
+                          Text(
+                            'Upload Profile Photo',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.black,
+                                ),
+                          ),
+                          InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              if (valueOrDefault(
+                                      currentUserDocument?.hireOrWork, '') ==
+                                  valueOrDefault(
+                                      currentUserDocument?.desiredGender, '')) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SetupJobReqWidget(),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SetupCVWidget(),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Icon(
+                              Icons.arrow_right_alt,
+                              color: Color(0xFC070707),
+                              size: 50.0,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(
-                  'assets/images/hireuplogodraft-removebg-preview.png',
-                  width: double.infinity,
-                  height: 200.0,
-                  fit: BoxFit.cover,
+                    ),
+                  ],
                 ),
+              ],
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.asset(
+                'assets/images/hireuplogodraft-removebg-preview.png',
+                width: double.infinity,
+                height: 200.0,
+                fit: BoxFit.cover,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

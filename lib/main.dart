@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    userStream = hireUpFirebaseUserStream()
+    userStream = hiredupnewFirebaseUserStream()
       ..listen((user) => initialUser ?? setState(() => initialUser = user));
     jwtTokenStream.listen((_) {});
     Future.delayed(
@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Hire-Up',
+      title: ' Hiredupnew',
       localizationsDelegates: [
         FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,

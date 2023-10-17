@@ -33,3 +33,23 @@ export '/misc/privacy_policy/privacy_policy_widget.dart'
     show PrivacyPolicyWidget;
 export '/misc/aboutus/aboutus_widget.dart' show AboutusWidget;
 export '/misc/subscription/subscription_widget.dart' show SubscriptionWidget;
+export '/employer_only/employer_post/employer_post_widget.dart'
+    show EmployerPostWidget;
+export '/premium_account/employer_premium/employer_premium_widget.dart'
+    show EmployerPremiumWidget;
+export '/premium_account/worker_premium/worker_premium_widget.dart'
+    show WorkerPremiumWidget;
+export '/premium_account/job_vacancy_list/job_vacancy_list_widget.dart'
+    show JobVacancyListWidget;
+export '/premium_account/search_user/search_user_widget.dart'
+    show SearchUserWidget;
+export '/premium_account/premium_calender/premium_calender_widget.dart'
+    show PremiumCalenderWidget;
+export '/worker_only/immediate_post/immediate_post_widget.dart'
+    show ImmediatePostWidget;
+export '/premium_account/immediate_view/immediate_view_widget.dart'
+    show ImmediateViewWidget;
+export '/employer_only/employe_hire/employe_hire_widget.dart'
+    show EmployeHireWidget;
+export '/worker_only/worker_hire_req/worker_hire_req_widget.dart'
+    show WorkerHireReqWidget;
