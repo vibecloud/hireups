@@ -167,6 +167,8 @@ class _PremiumCalenderWidgetState extends State<PremiumCalenderWidget>
                                         inactiveDateStyle:
                                             FlutterFlowTheme.of(context)
                                                 .labelMedium,
+                                        locale: FFLocalizations.of(context)
+                                            .languageCode,
                                       ),
                                     ),
                                     Column(
@@ -601,6 +603,8 @@ class _PremiumCalenderWidgetState extends State<PremiumCalenderWidget>
                                         inactiveDateStyle:
                                             FlutterFlowTheme.of(context)
                                                 .labelMedium,
+                                        locale: FFLocalizations.of(context)
+                                            .languageCode,
                                       ),
                                     ),
                                     Column(

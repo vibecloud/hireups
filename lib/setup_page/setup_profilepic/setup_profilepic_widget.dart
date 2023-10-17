@@ -9,6 +9,7 @@ import '/flutter_flow/upload_data.dart';
 import '/setup_page/setup_c_v/setup_c_v_widget.dart';
 import '/setup_page/setup_job_req/setup_job_req_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -119,29 +120,71 @@ class _SetupProfilepicWidgetState extends State<SetupProfilepicWidget>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AuthUserStreamWidget(
-                            builder: (context) => InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                await currentUserReference!
-                                    .update(createUsersRecordData(
-                                  photoUrl: _model.uploadedFileUrl,
-                                ));
-                              },
-                              child: Container(
-                                width: 120.0,
-                                height: 120.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
+                            builder: (context) =>
+                                StreamBuilder<List<UsersRecord>>(
+                              stream: queryUsersRecord(
+                                queryBuilder: (usersRecord) =>
+                                    usersRecord.where(
+                                  'photo_url',
+                                  isEqualTo: currentUserPhoto,
                                 ),
-                                child: Image.network(
-                                  currentUserPhoto,
-                                  fit: BoxFit.cover,
-                                ),
+                                singleRecord: true,
                               ),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          FlutterFlowTheme.of(context).primary,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                                List<UsersRecord> circleImageUsersRecordList =
+                                    snapshot.data!;
+                                // Return an empty Container when the item does not exist.
+                                if (snapshot.data!.isEmpty) {
+                                  return Container();
+                                }
+                                final circleImageUsersRecord =
+                                    circleImageUsersRecordList.isNotEmpty
+                                        ? circleImageUsersRecordList.first
+                                        : null;
+                                return InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    await queryUsersRecordOnce(
+                                      queryBuilder: (usersRecord) =>
+                                          usersRecord.where(
+                                        'photo_url',
+                                        isEqualTo: _model.uploadedFileUrl,
+                                      ),
+                                      singleRecord: true,
+                                    ).then((s) => s.firstOrNull);
+                                  },
+                                  child: Container(
+                                    width: 120.0,
+                                    height: 120.0,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Image.network(
+                                      currentUserPhoto,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           Align(
@@ -228,24 +271,6 @@ class _SetupProfilepicWidgetState extends State<SetupProfilepicWidget>
                                   .update(createUsersRecordData(
                                 photoUrl: _model.uploadedFileUrl,
                               ));
-                              if (valueOrDefault(
-                                      currentUserDocument?.hireOrWork, '') ==
-                                  valueOrDefault(
-                                      currentUserDocument?.desiredGender, '')) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SetupJobReqWidget(),
-                                  ),
-                                );
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SetupCVWidget(),
-                                  ),
-                                );
-                              }
                             },
                             child: Icon(
                               Icons.file_upload_outlined,
